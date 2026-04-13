@@ -12,6 +12,9 @@ const IMGS = {
   talent1:    'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg',
   talent2:    'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg',
   talent3:    'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c543a9e1-f226-4ced-80b0-feb8445a75b9_1600w.jpg',
+  jazz:       '/jazz.jpg',
+  louis:      '/louis.png',
+  teamphoto:  '/teamphoto.png',
 };
 
 /* Phone slider talent cards */
@@ -47,6 +50,16 @@ const TALENT_CARDS = [
     ringClass:    'bg-pink-500',
   },
   {
+    image:        IMGS.jazz,
+    username:     '@jazzthornton',
+    label:        'Jazz Thornton',
+    platformIcon: 'logos:instagram-icon',
+    followers:    '4.1M+',
+    ctaText:      'Follow',
+    ctaClass:     'bg-rose-500 text-white',
+    ringClass:    'bg-rose-500',
+  },
+  {
     image:        IMGS.groupEvent,
     username:     '@wearetenzing',
     label:        'WeAreTenzing',
@@ -57,7 +70,7 @@ const TALENT_CARDS = [
     ringClass:    'bg-teal-600',
   },
   {
-    image:        IMGS.talent3,
+    image:        IMGS.louis,
     username:     '@louisdavis',
     label:        'Louis Davis',
     platformIcon: 'logos:tiktok-icon',
@@ -258,7 +271,7 @@ export default function App() {
   /* ─── Marquee content ────────────────────────────────── */
   const marqueeItems = [
     { name: 'HowToDad',      stat: '6M+ Followers' },
-    { name: 'Jazz Thornton', stat: '4M+ Followers' },
+    { name: 'Jazz Thornton', stat: '4.1M+ Followers' },
     { name: 'Ruby Tui',      stat: '318K+ Followers' },
     { name: 'Torrell Tafa',  stat: '2.3M Followers' },
     { name: 'Louis Davis',   stat: '2.7M Followers' },
@@ -601,13 +614,28 @@ export default function App() {
             </div>
           </div>
 
-          {/* Quote tile */}
-          <div className="col-span-1 md:col-span-2 bg-[#efeae5] rounded-[1.5rem] p-7 md:p-10 flex flex-col justify-between border border-gray-900/6">
-            <iconify-icon icon="solar:quote-up-linear" width="28" className="text-gray-400 mb-4"></iconify-icon>
-            <p className="text-2xl md:text-3xl font-cormorant italic text-gray-900 leading-tight">
-              "The most authentic creator agency we've worked with. The ROI has never been higher."
-            </p>
-            <p className="text-sm text-gray-500 font-medium mt-6">— Elena Chen, Bloom Skincare</p>
+          {/* Jazz Thornton portrait */}
+          <div className="talent-portrait-card rounded-[1.5rem]">
+            <img src={IMGS.jazz} alt="Jazz Thornton" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+            <div className="absolute bottom-5 left-5 z-10">
+              <p className="text-white font-bold tracking-tight text-sm">Jazz Thornton</p>
+              <p className="text-white/60 text-xs">Mental Health Activist</p>
+              <p className="text-white/80 text-xs font-semibold mt-0.5">4.1M+ Followers</p>
+            </div>
+          </div>
+
+          {/* Quote tile — teamphoto background */}
+          <div className="col-span-1 md:col-span-2 relative rounded-[1.5rem] overflow-hidden border border-gray-900/6 min-h-[200px]">
+            <img src={IMGS.teamphoto} className="absolute inset-0 w-full h-full object-cover" alt="WeAreTenzing team" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/30"></div>
+            <div className="relative z-10 p-7 md:p-10 h-full flex flex-col justify-between">
+              <iconify-icon icon="solar:quote-up-linear" width="28" className="text-white/60 mb-4"></iconify-icon>
+              <p className="text-2xl md:text-3xl font-cormorant italic text-white leading-tight">
+                "The most authentic creator agency we've worked with. The ROI has never been higher."
+              </p>
+              <p className="text-sm text-white/60 font-medium mt-6">— Elena Chen, Bloom Skincare</p>
+            </div>
           </div>
 
           {/* Ruby Tui */}
@@ -784,12 +812,12 @@ export default function App() {
         <div className="px-6 md:px-12">
           <div className="talent-scroll-track scroll-reveal sr-delay-1">
             {[
-              { img: IMGS.howtodad,   name: 'HowToDad',     niche: 'Family & Comedy',   f: '6M+' },
-              { img: IMGS.torrell,    name: 'Torrell Tafa',  niche: 'Lifestyle',         f: '2.3M' },
-              { img: IMGS.rubytui,    name: 'Ruby Tui',      niche: 'Sport & Wellbeing', f: '318K' },
-              { img: IMGS.groupEvent, name: 'WeAreTenzing',  niche: 'Agency Events',     f: '34M combined' },
-              { img: IMGS.talent3,    name: 'Louis Davis',   niche: 'Entertainment',     f: '2.7M' },
-              { img: IMGS.talent1,    name: 'NZ Talent',     niche: 'Lifestyle',         f: '1.2M' },
+              { img: IMGS.howtodad,   name: 'HowToDad',      niche: 'Family & Comedy',        f: '6M+' },
+              { img: IMGS.jazz,       name: 'Jazz Thornton', niche: 'Mental Health & Author', f: '4.1M+' },
+              { img: IMGS.torrell,    name: 'Torrell Tafa',  niche: 'Lifestyle',              f: '2.3M' },
+              { img: IMGS.rubytui,    name: 'Ruby Tui',      niche: 'Sport & Wellbeing',      f: '318K' },
+              { img: IMGS.louis,      name: 'Louis Davis',   niche: 'Entertainment',          f: '2.7M' },
+              { img: IMGS.groupEvent, name: 'WeAreTenzing',  niche: 'Agency Events',          f: '34M combined' },
             ].map(({ img, name, niche, f }) => (
               <div key={name} className="talent-portrait-card shrink-0 w-[220px] md:w-[250px] rounded-[1.2rem]">
                 <img src={img} alt={name} loading="lazy" />
@@ -903,7 +931,7 @@ export default function App() {
                     </div>
                     {/* Stories row */}
                     <div className="flex gap-2 mb-2">
-                      {[IMGS.howtodad, IMGS.rubytui, IMGS.torrell, IMGS.talent3].map((img, i) => (
+                      {[IMGS.jazz, IMGS.howtodad, IMGS.rubytui, IMGS.torrell].map((img, i) => (
                         <div key={i} className="w-10 h-10 rounded-full overflow-hidden ring-[1.5px] ring-orange-400 ring-offset-1 shrink-0">
                           <img src={img} className="w-full h-full object-cover" alt="" loading="lazy" />
                         </div>
@@ -912,7 +940,7 @@ export default function App() {
                   </div>
                   {/* 3×3 Instagram grid */}
                   <div className="grid grid-cols-3 gap-[1px] bg-gray-200">
-                    {[IMGS.howtodad, IMGS.torrell, IMGS.rubytui, IMGS.groupEvent, IMGS.talent3, IMGS.talent1, IMGS.groupHero, IMGS.talent2, IMGS.howtodad].map((img, i) => (
+                    {[IMGS.jazz, IMGS.louis, IMGS.howtodad, IMGS.torrell, IMGS.rubytui, IMGS.groupEvent, IMGS.groupHero, IMGS.talent1, IMGS.jazz].map((img, i) => (
                       <div key={i} className="insta-grid-item">
                         <img src={img} alt="" loading="lazy" />
                       </div>
