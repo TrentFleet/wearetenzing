@@ -510,15 +510,15 @@ export default function App() {
       </main>
 
       {/* ═══════════════════════════════════════════════════
-          MARQUEE CREATOR STRIP
+          CREATOR STRIP — static, no animation
           ═══════════════════════════════════════════════════ */}
-      <div className="marquee-container py-5 my-2 border-b border-gray-900/6">
-        <div className="marquee-track" style={{ animationDuration: '28s', animationDirection: 'reverse' }}>
-          {[...marqueeItems, ...marqueeItems].map((item, i) => (
-            <div key={i} className="flex items-center px-0">
-              <span className="text-sm font-bold tracking-tight text-gray-900 px-4 whitespace-nowrap">{item.name}</span>
-              <span className="text-xs font-medium text-gray-400 uppercase tracking-widest px-4 whitespace-nowrap">{item.stat}</span>
-              <span className="text-gray-300 text-lg px-2 select-none">·</span>
+      <div className="py-5 my-2 border-b border-gray-900/6 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-wrap items-center gap-0">
+          {marqueeItems.map((item, i) => (
+            <div key={i} className="flex items-center">
+              <span className="text-sm font-bold tracking-tight text-gray-900 px-3 whitespace-nowrap">{item.name}</span>
+              <span className="text-xs font-medium text-gray-400 uppercase tracking-widest px-3 whitespace-nowrap">{item.stat}</span>
+              {i < marqueeItems.length - 1 && <span className="text-gray-300 text-lg px-1 select-none">·</span>}
             </div>
           ))}
         </div>
@@ -530,17 +530,20 @@ export default function App() {
       <section className="bg-[#0c0c0c] relative overflow-hidden py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           {[
-            { idx: '01', num: '34M+', label: 'Combined Creator Reach',  speed: '-0.02', right: false },
-            { idx: '02', num: '120+', label: 'Talent Managed',          speed:  '0.02', right: true  },
-            { idx: '03', num: '300%', label: 'Avg. Engagement Lift',    speed: '-0.02', right: false },
-          ].map(({ idx, num, label, speed, right }) => (
+            { idx: '01', num: '34M+',  label: 'Combined Creator Reach',  sub: 'Across TikTok, Instagram & YouTube',      speed: '-0.02', right: false },
+            { idx: '02', num: '120+',  label: 'Talent Managed',          sub: 'Active creators in our NZ & AU roster',   speed:  '0.02', right: true  },
+            { idx: '03', num: '300%',  label: 'Avg. Engagement Lift',    sub: '3× above the industry benchmark',         speed: '-0.02', right: false },
+          ].map(({ idx, num, label, sub, speed, right }) => (
             <div
               key={num}
-              className={`flex ${right ? 'justify-end' : 'justify-start'} items-center gap-5 md:gap-10 py-4 md:py-5 border-b border-white/[0.06] scroll-reveal group`}
+              className={`flex ${right ? 'justify-end' : 'justify-start'} items-center gap-5 md:gap-10 py-4 md:py-6 border-b border-white/[0.06] scroll-reveal group`}
             >
               {!right && <span className="text-white/20 text-[10px] font-bold tracking-[0.25em] tabular-nums shrink-0 hidden md:block">{idx}</span>}
               <span className="giant-text text-white leading-none tabular-nums" data-parallax-speed={speed}>{num}</span>
-              <span className="text-gray-500 text-base md:text-xl font-light hidden sm:block group-hover:text-gray-300 transition-colors">{label}</span>
+              <div className="hidden sm:flex flex-col gap-1">
+                <span className="text-gray-300 text-base md:text-xl font-light group-hover:text-white transition-colors">{label}</span>
+                <span className="text-gray-600 text-xs md:text-sm font-normal">{sub}</span>
+              </div>
               {right && <span className="text-white/20 text-[10px] font-bold tracking-[0.25em] tabular-nums shrink-0 hidden md:block">{idx}</span>}
             </div>
           ))}
@@ -640,8 +643,14 @@ export default function App() {
       {/* ═══════════════════════════════════════════════════
           HOW WE WORK — journey timeline + bar chart
           ═══════════════════════════════════════════════════ */}
-      <section className="w-full bg-[#0c0c0c] py-20 md:py-28 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+      <section className="w-full bg-[#080808] py-20 md:py-28 overflow-hidden relative">
+        {/* Decorative colour orbs */}
+        <div className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%)', transform: 'translate(-30%, -30%)' }}></div>
+        <div className="absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.14) 0%, transparent 70%)', transform: 'translate(30%, 0)' }}></div>
+        <div className="absolute bottom-0 left-1/3 w-[450px] h-[450px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.14) 0%, transparent 70%)', transform: 'translateY(40%)' }}></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%)' }}></div>
+
+        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
 
           {/* Heading */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 scroll-reveal">
@@ -658,28 +667,28 @@ export default function App() {
             </a>
           </div>
 
-          {/* Journey timeline — horizontal */}
-          <div className="relative mb-16 md:mb-20">
-            {/* Connecting line (desktop) */}
-            <div className="hidden md:block absolute top-[38px] left-[40px] right-[40px] h-px bg-white/8 z-0"></div>
+          {/* Journey timeline — horizontal, colourful */}
+          <div className="relative mb-16 md:mb-24">
+            {/* Gradient connecting line (desktop) */}
+            <div className="hidden md:block absolute top-[38px] left-[40px] right-[40px] h-px z-0" style={{ background: 'linear-gradient(to right, #6366f1, #8b5cf6, #06b6d4, #10b981, #84cc16)' }}></div>
 
             <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-4">
               {[
-                { n: '01', icon: 'solar:phone-calling-linear',             title: 'Discovery',   desc: 'We learn your goals and audience.' },
-                { n: '02', icon: 'solar:users-group-two-rounded-linear',   title: 'Match',       desc: 'We pair you with the right creators.' },
-                { n: '03', icon: 'solar:document-add-linear',              title: 'Create',      desc: 'Concepts developed & approved by you.' },
-                { n: '04', icon: 'solar:play-circle-linear',               title: 'Launch',      desc: 'Content goes live across platforms.' },
-                { n: '05', icon: 'solar:chart-square-linear',              title: 'Measure',     desc: 'Full performance reporting delivered.' },
-              ].map(({ n, icon, title, desc }, idx) => (
+                { n: '01', icon: 'solar:phone-calling-linear',            title: 'Discovery',  desc: 'We learn your goals and audience.',             color: 'from-indigo-500 to-violet-600',   ring: 'ring-indigo-500/30',   text: 'text-indigo-300'   },
+                { n: '02', icon: 'solar:users-group-two-rounded-linear',  title: 'Match',      desc: 'We pair you with the right creators.',           color: 'from-violet-500 to-purple-600',   ring: 'ring-violet-500/30',   text: 'text-violet-300'   },
+                { n: '03', icon: 'solar:document-add-linear',             title: 'Create',     desc: 'Concepts developed & approved by you.',          color: 'from-cyan-500 to-blue-600',       ring: 'ring-cyan-500/30',     text: 'text-cyan-300'     },
+                { n: '04', icon: 'solar:play-circle-linear',              title: 'Launch',     desc: 'Content goes live across platforms.',             color: 'from-emerald-500 to-teal-600',    ring: 'ring-emerald-500/30',  text: 'text-emerald-300'  },
+                { n: '05', icon: 'solar:chart-square-linear',             title: 'Measure',    desc: 'Full performance reporting delivered.',          color: 'from-lime-500 to-green-600',      ring: 'ring-lime-500/30',     text: 'text-lime-300'     },
+              ].map(({ n, icon, title, desc, color, ring, text }, idx) => (
                 <div
                   key={n}
                   className="journey-step flex flex-col items-center text-center relative z-10"
                   style={{ '--step-delay': `${idx * 130}ms` }}
                 >
-                  <div className="w-[76px] h-[76px] bg-white/6 border border-white/10 rounded-2xl flex items-center justify-center mb-5 hover:bg-white/12 hover:border-white/20 transition-all duration-500 backdrop-blur-sm">
-                    <iconify-icon icon={icon} width="30" className="text-white"></iconify-icon>
+                  <div className={`w-[76px] h-[76px] bg-gradient-to-br ${color} rounded-2xl flex items-center justify-center mb-5 ring-4 ${ring} shadow-lg hover:scale-105 transition-transform duration-300`}>
+                    <iconify-icon icon={icon} width="32" className="text-white"></iconify-icon>
                   </div>
-                  <span className="text-[10px] font-bold tracking-widest text-white/30 mb-1">{n}</span>
+                  <span className={`text-[10px] font-bold tracking-widest ${text} mb-1`}>{n}</span>
                   <p className="font-bold text-white tracking-tight mb-1.5">{title}</p>
                   <p className="text-gray-500 text-xs leading-relaxed max-w-[140px]">{desc}</p>
                 </div>
@@ -687,35 +696,35 @@ export default function App() {
             </div>
           </div>
 
-          {/* Performance comparison bar chart */}
-          <div className="bar-chart-section mt-4 md:mt-8">
-            <p className="text-[10px] font-bold tracking-[0.28em] uppercase text-gray-600 mb-8">WeAreTenzing vs. Traditional Agencies</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+          {/* Performance comparison — colourful radial chart feel */}
+          <div className="bar-chart-section">
+            <p className="text-[10px] font-bold tracking-[0.28em] uppercase text-gray-600 mb-10">WeAreTenzing vs. Traditional Agencies</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
               {[
-                { metric: 'Engagement Rate', wt: 92, ta: 38 },
-                { metric: 'Content Authenticity', wt: 96, ta: 45 },
-                { metric: 'Campaign Speed', wt: 88, ta: 52 },
-                { metric: 'ROI Delivered', wt: 94, ta: 41 },
-              ].map(({ metric, wt, ta }) => (
+                { metric: 'Engagement Rate',     wt: 92, ta: 38, grad: 'linear-gradient(to top, #6366f1, #a78bfa)' },
+                { metric: 'Content Authenticity',wt: 96, ta: 45, grad: 'linear-gradient(to top, #06b6d4, #67e8f9)' },
+                { metric: 'Campaign Speed',       wt: 88, ta: 52, grad: 'linear-gradient(to top, #10b981, #6ee7b7)' },
+                { metric: 'ROI Delivered',        wt: 94, ta: 41, grad: 'linear-gradient(to top, #8b5cf6, #c4b5fd)' },
+              ].map(({ metric, wt, ta, grad }, mIdx) => (
                 <div key={metric} className="flex flex-col">
-                  <div className="flex items-end gap-2 h-40 mb-3">
-                    {/* Traditional Agency bar */}
-                    <div className="flex flex-col items-center gap-1.5 flex-1">
+                  <div className="flex items-end gap-2 mb-4" style={{ height: '160px' }}>
+                    {/* Traditional Agency */}
+                    <div className="flex flex-col items-center gap-1 flex-1">
                       <span className="text-[10px] text-gray-600 font-bold tabular-nums">{ta}%</span>
-                      <div className="w-full relative" style={{ height: '128px' }}>
+                      <div className="w-full relative rounded-t-lg overflow-hidden" style={{ height: '140px' }}>
                         <div
-                          className="bar-chart-bar absolute bottom-0 left-0 right-0 bg-white/10 border border-white/8"
-                          style={{ '--bar-delay': '0ms', height: `${ta}%` }}
+                          className="bar-chart-bar absolute bottom-0 left-0 right-0 rounded-t-lg"
+                          style={{ '--bar-delay': `${mIdx * 80}ms`, height: `${ta}%`, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}
                         ></div>
                       </div>
                     </div>
-                    {/* WeAreTenzing bar */}
-                    <div className="flex flex-col items-center gap-1.5 flex-1">
+                    {/* WeAreTenzing — colourful gradient */}
+                    <div className="flex flex-col items-center gap-1 flex-1">
                       <span className="text-[10px] text-white font-bold tabular-nums">{wt}%</span>
-                      <div className="w-full relative" style={{ height: '128px' }}>
+                      <div className="w-full relative rounded-t-lg overflow-hidden" style={{ height: '140px' }}>
                         <div
-                          className="bar-chart-bar absolute bottom-0 left-0 right-0 bg-white"
-                          style={{ '--bar-delay': '200ms', height: `${wt}%` }}
+                          className="bar-chart-bar absolute bottom-0 left-0 right-0 rounded-t-lg"
+                          style={{ '--bar-delay': `${mIdx * 80 + 200}ms`, height: `${wt}%`, background: grad, boxShadow: `0 -4px 20px ${grad.includes('6366f1') ? '#6366f130' : grad.includes('06b6d4') ? '#06b6d430' : grad.includes('10b981') ? '#10b98130' : '#8b5cf630'}` }}
                         ></div>
                       </div>
                     </div>
@@ -724,12 +733,18 @@ export default function App() {
                 </div>
               ))}
             </div>
-            <div className="flex items-center gap-6 mt-6">
-              <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-white/10 border border-white/8"></div><span className="text-[10px] text-gray-600 font-semibold">Traditional Agency</span></div>
-              <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-white"></div><span className="text-[10px] text-gray-300 font-semibold">WeAreTenzing</span></div>
+            <div className="flex items-center gap-6 mt-8 pt-6 border-t border-white/[0.06]">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-sm" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}></div>
+                <span className="text-[10px] text-gray-600 font-semibold">Traditional Agency</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-sm" style={{ background: 'linear-gradient(135deg, #6366f1, #06b6d4)' }}></div>
+                <span className="text-[10px] text-gray-300 font-semibold">WeAreTenzing</span>
+              </div>
             </div>
           </div>
-        </div>
+        </div>{/* end relative z-10 */}
       </section>
 
       {/* ═══════════════════════════════════════════════════
@@ -823,8 +838,8 @@ export default function App() {
             <details key={q} className="group bg-[#efeae5] rounded-xl overflow-hidden border border-gray-900/5">
               <summary className="flex justify-between items-center p-5 cursor-pointer list-none font-semibold text-gray-900 hover:text-black">
                 {q}
-                <div className="w-7 h-7 rounded-full bg-black/5 flex items-center justify-center accordion-icon transition-transform duration-300 shrink-0 ml-4">
-                  <iconify-icon icon="solar:add-linear" width="18"></iconify-icon>
+                <div className="w-7 h-7 rounded-full bg-black/8 flex items-center justify-center shrink-0 ml-4 transition-transform duration-300 group-open:rotate-180">
+                  <iconify-icon icon="solar:alt-arrow-down-linear" width="18"></iconify-icon>
                 </div>
               </summary>
               <div className="px-5 pb-5 text-sm text-gray-600 leading-relaxed max-w-xl">{a}</div>
