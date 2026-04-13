@@ -171,65 +171,77 @@ export default function App() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Scroll-driven reveals (IntersectionObserver) — fire earlier for mobile feel
+  // Scroll-driven reveals — delayed past loader exit so animations actually fire
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); }
-      });
-    }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
-    document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
-    return () => observer.disconnect();
+    let observer;
+    const tid = setTimeout(() => {
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); }
+        });
+      }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+      document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+    }, 4600);
+    return () => { clearTimeout(tid); if (observer) observer.disconnect(); };
   }, []);
 
-  // Journey step reveal (IntersectionObserver)
+  // Journey step reveal — delayed past loader exit
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) { entry.target.classList.add('step-visible'); observer.unobserve(entry.target); }
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.journey-step').forEach(el => observer.observe(el));
-    return () => observer.disconnect();
+    let observer;
+    const tid = setTimeout(() => {
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) { entry.target.classList.add('step-visible'); observer.unobserve(entry.target); }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.journey-step').forEach(el => observer.observe(el));
+    }, 4600);
+    return () => { clearTimeout(tid); if (observer) observer.disconnect(); };
   }, []);
 
-  // Bar chart grow animation (IntersectionObserver)
+  // Bar chart grow animation — delayed past loader exit
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.querySelectorAll('.bar-chart-bar').forEach(bar => bar.classList.add('bar-grown'));
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.3 });
-    document.querySelectorAll('.bar-chart-section').forEach(el => observer.observe(el));
-    return () => observer.disconnect();
+    let observer;
+    const tid = setTimeout(() => {
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.querySelectorAll('.bar-chart-bar').forEach(bar => bar.classList.add('bar-grown'));
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      document.querySelectorAll('.bar-chart-section').forEach(el => observer.observe(el));
+    }, 4600);
+    return () => { clearTimeout(tid); if (observer) observer.disconnect(); };
   }, []);
 
-  // Count-up animation for stats (starts from 0)
+  // Count-up animation — delayed past loader exit
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const el      = entry.target;
-        const target  = parseFloat(el.dataset.target);
-        const suffix  = el.dataset.suffix || '';
-        const isFloat = el.dataset.float === 'true';
-        const dur     = 2200;
-        const start   = performance.now();
-        const tick    = (now) => {
-          const p      = Math.min((now - start) / dur, 1);
-          const eased  = 1 - Math.pow(1 - p, 3);
-          el.textContent = (isFloat ? (eased * target).toFixed(1) : Math.floor(eased * target)) + suffix;
-          if (p < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-        observer.unobserve(el);
-      });
-    }, { threshold: 0.5 });
-    document.querySelectorAll('.count-up').forEach(el => observer.observe(el));
-    return () => observer.disconnect();
+    let observer;
+    const tid = setTimeout(() => {
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el      = entry.target;
+          const target  = parseFloat(el.dataset.target);
+          const suffix  = el.dataset.suffix || '';
+          const isFloat = el.dataset.float === 'true';
+          const dur     = 2200;
+          const start   = performance.now();
+          const tick    = (now) => {
+            const p      = Math.min((now - start) / dur, 1);
+            const eased  = 1 - Math.pow(1 - p, 3);
+            el.textContent = (isFloat ? (eased * target).toFixed(1) : Math.floor(eased * target)) + suffix;
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+          observer.unobserve(el);
+        });
+      }, { threshold: 0.5 });
+      document.querySelectorAll('.count-up').forEach(el => observer.observe(el));
+    }, 4600);
+    return () => { clearTimeout(tid); if (observer) observer.disconnect(); };
   }, []);
 
   // Magnetic buttons
@@ -326,7 +338,7 @@ export default function App() {
         <div className="flex max-w-7xl mx-auto items-center justify-between">
           <a href="/" className="flex items-center gap-2">
             <img src="https://wearetenzing.com/wp-content/uploads/2025/08/icon-dark.png" alt="WeAreTenzing" className="w-7 h-7 object-contain" />
-            <span className="font-bold text-base tracking-tight">WeAreTenzing</span>
+            <span className="hidden sm:inline font-bold text-base tracking-tight">WeAreTenzing</span>
           </a>
           <div className="hidden md:flex items-center gap-8">
             {['Talent','Services','About','Articles'].map(l => (
@@ -334,7 +346,7 @@ export default function App() {
             ))}
           </div>
           <div className="flex items-center gap-3">
-            <a href="/contact" className="btn-magnetic flex items-center gap-2 bg-black text-white px-4 py-2 md:px-5 md:py-2.5 rounded-full text-xs md:text-sm font-semibold hover:bg-gray-800 transition-colors">
+            <a href="/contact" className="btn-magnetic hidden md:flex items-center gap-2 bg-black text-white px-4 py-2 md:px-5 md:py-2.5 rounded-full text-xs md:text-sm font-semibold hover:bg-gray-800 transition-colors">
               Let's Connect
               <iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon>
             </a>
@@ -363,21 +375,6 @@ export default function App() {
 
               {/* ── Left: Text ── */}
               <div className="flex flex-col gap-5 sm:gap-7 max-w-xl z-10">
-
-                {/* Badge */}
-                <div className="animate-enter flex items-center gap-3">
-                  <img src="https://wearetenzing.com/wp-content/uploads/2025/08/icon-dark.png" alt="" className="w-8 h-8 object-contain" />
-                  <div className="flex items-center gap-2">
-                    <div className="flex -space-x-1.5">
-                      {['logos:tiktok-icon','logos:instagram-icon','logos:youtube-icon'].map(ic => (
-                        <div key={ic} className="w-6 h-6 rounded-full bg-white/80 border border-white/60 flex items-center justify-center shadow-sm">
-                          <iconify-icon icon={ic} width="11"></iconify-icon>
-                        </div>
-                      ))}
-                    </div>
-                    <span className="text-[10px] font-bold tracking-[0.28em] text-gray-500 uppercase">100% Kiwi-Owned</span>
-                  </div>
-                </div>
 
                 {/* Headline */}
                 <h1 className="animate-enter delay-100 text-[clamp(2.4rem,7vw,5.5rem)] font-semibold leading-[0.91] tracking-tight text-gray-900">
@@ -423,8 +420,8 @@ export default function App() {
               {/* ── Right: Phone ── */}
               <div ref={phoneContainerRef} className="phone-tilt-container phone-slide-in relative flex justify-center lg:justify-end mt-2 lg:mt-0">
 
-                {/* Ambient glow */}
-                <div className="phone-ambient-glow absolute inset-0 z-0 scale-125 rounded-full overflow-hidden pointer-events-none">
+                {/* Ambient glow — hidden on mobile to prevent image edge bleed */}
+                <div className="phone-ambient-glow hidden sm:block absolute inset-0 z-0 scale-125 rounded-full overflow-hidden pointer-events-none">
                   {TALENT_CARDS.map((card, i) => (
                     <div key={i} className="absolute inset-0 transition-opacity duration-[2500ms]" style={{ opacity: i === currentCardIndex ? 1 : 0 }}>
                       <img src={card.image} className="w-full h-full object-cover" aria-hidden="true" alt="" />
@@ -534,35 +531,21 @@ export default function App() {
         </div>
       </main>
 
-      {/* ═══════════════════════════════════════════════════
-          CREATOR STRIP — static, no animation
-          ═══════════════════════════════════════════════════ */}
-      <div className="py-4 my-2 border-b border-gray-900/6 overflow-x-auto no-scrollbar">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12 flex items-center gap-0 min-w-max sm:min-w-0 sm:flex-wrap">
-          {marqueeItems.map((item, i) => (
-            <div key={i} className="flex items-center">
-              <span className="text-sm font-bold tracking-tight text-gray-900 px-3 whitespace-nowrap">{item.name}</span>
-              <span className="text-xs font-medium text-gray-400 uppercase tracking-widest px-3 whitespace-nowrap">{item.stat}</span>
-              {i < marqueeItems.length - 1 && <span className="text-gray-300 text-lg px-1 select-none">·</span>}
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* ═══════════════════════════════════════════════════
           DARK PARALLAX STATS SECTION — structured
           ═══════════════════════════════════════════════════ */}
       <section className="bg-[#0c0c0c] relative overflow-hidden py-12 md:py-24">
 
-        {/* Ghost text background */}
+        {/* Ghost text background — talent names only */}
         <div className="ghost-text-layer" aria-hidden="true">
           {[
-            ['HowToDad', 'Jazz Thornton', 'Ruby Tui', 'Torrell Tafa', 'Louis Davis', '120+ Creators', '50+ Campaigns', '100% NZ-Owned'],
-            ['Managed by Tenzing', 'Purpose-Driven', 'HowToDad', 'Jazz Thornton', 'Ruby Tui', 'Torrell Tafa', 'Louis Davis', '34M+ Reach'],
-            ['HowToDad', 'Jazz Thornton', 'Ruby Tui', 'Torrell Tafa', 'Louis Davis', '120+ Creators', '50+ Campaigns', '100% NZ-Owned'],
+            ['HowToDad', 'Jazz Thornton', 'Ruby Tui', 'Torrell Tafa', 'Louis Davis'],
+            ['Ruby Tui', 'HowToDad', 'Torrell Tafa', 'Louis Davis', 'Jazz Thornton'],
+            ['Jazz Thornton', 'Ruby Tui', 'Louis Davis', 'HowToDad', 'Torrell Tafa'],
           ].map((row, ri) => (
             <div key={ri} className="ghost-text-row">
-              {[...row, ...row, ...row].map((t, i) => (
+              {[...row, ...row, ...row, ...row].map((t, i) => (
                 <span key={i} className="text-white font-bold text-5xl md:text-7xl lg:text-8xl" style={{ fontFamily: 'var(--font-ui)', letterSpacing: '-0.04em' }}>
                   {t}
                 </span>
@@ -572,16 +555,6 @@ export default function App() {
         </div>
 
         <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12 relative z-10">
-
-          {/* Talent Managed badge */}
-          <div className="flex items-center gap-4 mb-10 scroll-reveal">
-            <div className="inline-flex items-center gap-3 bg-white/[0.06] border border-white/10 rounded-full px-5 py-2.5">
-              <span className="text-white font-bold text-lg tracking-tight">120+</span>
-              <span className="w-px h-4 bg-white/20"></span>
-              <span className="text-white/70 text-xs font-semibold uppercase tracking-widest">Talent Managed</span>
-            </div>
-            <span className="text-gray-600 text-xs font-medium hidden sm:block">Active creators in our NZ &amp; AU roster</span>
-          </div>
 
           {[
             { idx: '01', num: '34M+',  label: 'Combined Creator Reach',  sub: 'Across TikTok, Instagram & YouTube',      speed: '-0.02', right: false },
@@ -602,11 +575,6 @@ export default function App() {
             </div>
           ))}
         </div>{/* end max-w-7xl */}
-
-        {/* Subtle bg image */}
-        <div className="absolute inset-0 opacity-[0.06] pointer-events-none overflow-hidden">
-          <img src={IMGS.groupHero} className="w-full h-full object-cover" alt="" aria-hidden="true" />
-        </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════
@@ -625,35 +593,6 @@ export default function App() {
         </div>
 
         <div className="bento-grid scroll-reveal sr-delay-1">
-
-          {/* Big tile — WeAreTenzing group photo */}
-          <div className="col-span-1 md:col-span-2 md:row-span-2 relative overflow-hidden rounded-[1.5rem] group cursor-pointer border border-gray-900/8">
-            <img src={IMGS.groupHero} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="WeAreTenzing" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            <div className="absolute bottom-8 left-8">
-              <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2">WeAreTenzing Agency</p>
-              <p className="text-white text-5xl md:text-7xl font-bold tracking-tighter leading-none">34M+</p>
-              <p className="text-white/60 text-sm mt-1.5">Combined creator reach</p>
-            </div>
-            <div className="absolute top-6 right-6 bg-black/30 backdrop-blur-md border border-white/10 rounded-full px-3 py-1.5">
-              <span className="text-white text-xs font-bold">NZ-Owned ✦ Creator-First</span>
-            </div>
-          </div>
-
-          {/* Stat tile — campaigns photo */}
-          <div className="relative rounded-[1.5rem] overflow-hidden border border-gray-900/8 flex flex-col justify-end">
-            <img
-              src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80"
-              className="absolute inset-0 w-full h-full object-cover"
-              alt="Campaign shoot"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10"></div>
-            <div className="relative z-10 p-6 md:p-8">
-              <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest mb-3">Monthly Campaigns</p>
-              <p className="text-white text-5xl md:text-6xl font-bold tracking-tighter leading-none">50+</p>
-            </div>
-          </div>
 
           {/* Torrell portrait */}
           <div className="talent-portrait-card rounded-[1.5rem]">
@@ -808,8 +747,8 @@ export default function App() {
           {/* Performance comparison — colourful radial chart feel */}
           <div className="bar-chart-section">
             <p className="text-[10px] font-bold tracking-[0.28em] uppercase text-gray-600 mb-10">
+              Traditional Agencies vs.{' '}
               <span style={{ background: 'linear-gradient(to right, #6366f1, #8b5cf6, #06b6d4, #10b981, #84cc16)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>WeAreTenzing</span>
-              {' '}vs. Traditional Agencies
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
               {[

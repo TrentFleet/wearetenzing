@@ -913,7 +913,7 @@ details[open] .group-open\:rotate-180 {
   flex-direction: column;
   justify-content: space-around;
   padding: 20px 0;
-  opacity: 0.045;
+  opacity: 0.03;
 }
 
 .ghost-text-row {
