@@ -165,7 +165,7 @@ body::after {
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee 32s linear infinite;
+  animation: marquee 18s linear infinite;
 }
 
 .marquee-track:hover {
@@ -853,6 +853,84 @@ details[open] .group-open\:rotate-180 {
 
 .phone-slide-in {
   animation: phoneSlideIn 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+
+/* ============================================
+   JOURNEY TRACK — horizontal scroll on mobile
+   ============================================ */
+@media (max-width: 767px) {
+  .journey-track {
+    display: flex !important;
+    overflow-x: auto;
+    gap: 0 !important;
+    padding-bottom: 20px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+  }
+
+  .journey-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .journey-step {
+    min-width: 110px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    padding: 0 8px;
+  }
+
+  .journey-step-desc {
+    display: none;
+  }
+
+  .journey-arrow {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 24px;
+    color: rgba(255,255,255,0.15);
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .journey-arrow {
+    display: none;
+  }
+}
+
+/* ============================================
+   GHOST TEXT — dark stats section background
+   ============================================ */
+.ghost-text-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 20px 0;
+  opacity: 0.045;
+}
+
+.ghost-text-row {
+  display: flex;
+  gap: 48px;
+  white-space: nowrap;
+  animation: ghostDrift 60s linear infinite;
+}
+
+.ghost-text-row:nth-child(even) {
+  animation-direction: reverse;
+  animation-duration: 72s;
+}
+
+@keyframes ghostDrift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-33.33%); }
 }
 
 /* ============================================

@@ -453,7 +453,7 @@ export default function App() {
                 </div>
 
                 {/* Phone Frame */}
-                <div className="phone-inner relative w-[230px] h-[470px] sm:w-[260px] sm:h-[530px] md:w-[290px] md:h-[590px] bg-white rounded-[2.2rem] shadow-2xl border-[7px] border-white ring-1 ring-gray-900/8 overflow-hidden z-10">
+                <div className="phone-inner relative w-[220px] h-[450px] xs:w-[230px] xs:h-[470px] sm:w-[260px] sm:h-[530px] md:w-[290px] md:h-[590px] bg-white rounded-[2.2rem] shadow-2xl border-[7px] border-white ring-1 ring-gray-900/8 overflow-hidden z-10">
                   {/* Dynamic Island */}
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 h-6 w-24 bg-black rounded-b-xl z-30"></div>
                   {/* Status bar */}
@@ -477,7 +477,7 @@ export default function App() {
                   <div className="w-full h-full relative bg-gray-900">
                     {TALENT_CARDS.map((card, i) => (
                       <div key={i} className={`slider-card w-full h-full absolute inset-0 ${i === currentCardIndex ? 'card-active' : 'card-hidden'}`}>
-                        <img src={card.image} className="w-full h-full object-cover" alt={card.label} loading={i === 0 ? 'eager' : 'lazy'} />
+                        <img src={card.image} className="w-full h-full object-cover object-center" alt={card.label} loading={i === 0 ? 'eager' : 'lazy'} style={{ objectPosition: 'center top' }} />
                         <div className="absolute top-10 left-4 flex items-center gap-2 z-20">
                           <div className="w-8 h-8 rounded-full border-2 border-white overflow-hidden bg-black flex items-center justify-center">
                             <iconify-icon icon={card.platformIcon} width="14"></iconify-icon>
@@ -553,7 +553,36 @@ export default function App() {
           DARK PARALLAX STATS SECTION — structured
           ═══════════════════════════════════════════════════ */}
       <section className="bg-[#0c0c0c] relative overflow-hidden py-12 md:py-24">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
+
+        {/* Ghost text background */}
+        <div className="ghost-text-layer" aria-hidden="true">
+          {[
+            ['HowToDad', 'Jazz Thornton', 'Ruby Tui', 'Torrell Tafa', 'Louis Davis', '120+ Creators', '50+ Campaigns', '100% NZ-Owned'],
+            ['Managed by Tenzing', 'Purpose-Driven', 'HowToDad', 'Jazz Thornton', 'Ruby Tui', 'Torrell Tafa', 'Louis Davis', '34M+ Reach'],
+            ['HowToDad', 'Jazz Thornton', 'Ruby Tui', 'Torrell Tafa', 'Louis Davis', '120+ Creators', '50+ Campaigns', '100% NZ-Owned'],
+          ].map((row, ri) => (
+            <div key={ri} className="ghost-text-row">
+              {[...row, ...row, ...row].map((t, i) => (
+                <span key={i} className="text-white font-bold text-5xl md:text-7xl lg:text-8xl" style={{ fontFamily: 'var(--font-ui)', letterSpacing: '-0.04em' }}>
+                  {t}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12 relative z-10">
+
+          {/* Talent Managed badge */}
+          <div className="flex items-center gap-4 mb-10 scroll-reveal">
+            <div className="inline-flex items-center gap-3 bg-white/[0.06] border border-white/10 rounded-full px-5 py-2.5">
+              <span className="text-white font-bold text-lg tracking-tight">120+</span>
+              <span className="w-px h-4 bg-white/20"></span>
+              <span className="text-white/70 text-xs font-semibold uppercase tracking-widest">Talent Managed</span>
+            </div>
+            <span className="text-gray-600 text-xs font-medium hidden sm:block">Active creators in our NZ &amp; AU roster</span>
+          </div>
+
           {[
             { idx: '01', num: '34M+',  label: 'Combined Creator Reach',  sub: 'Across TikTok, Instagram & YouTube',      speed: '-0.02', right: false },
             { idx: '02', num: '120+',  label: 'Talent Managed',          sub: 'Active creators in our NZ & AU roster',   speed:  '0.02', right: true  },
@@ -572,7 +601,8 @@ export default function App() {
               {right && <span className="text-white/20 text-[10px] font-bold tracking-[0.25em] tabular-nums shrink-0 hidden md:block">{idx}</span>}
             </div>
           ))}
-        </div>
+        </div>{/* end max-w-7xl */}
+
         {/* Subtle bg image */}
         <div className="absolute inset-0 opacity-[0.06] pointer-events-none overflow-hidden">
           <img src={IMGS.groupHero} className="w-full h-full object-cover" alt="" aria-hidden="true" />
@@ -610,10 +640,19 @@ export default function App() {
             </div>
           </div>
 
-          {/* Stat tile */}
-          <div className="bg-[#0c0c0c] text-white rounded-[1.5rem] p-6 md:p-8 flex flex-col justify-end border border-white/5">
-            <p className="text-gray-600 text-[10px] font-bold uppercase tracking-widest mb-3">Monthly Campaigns</p>
-            <p className="text-5xl md:text-6xl font-bold tracking-tighter leading-none">50+</p>
+          {/* Stat tile — campaigns photo */}
+          <div className="relative rounded-[1.5rem] overflow-hidden border border-gray-900/8 flex flex-col justify-end">
+            <img
+              src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80"
+              className="absolute inset-0 w-full h-full object-cover"
+              alt="Campaign shoot"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10"></div>
+            <div className="relative z-10 p-6 md:p-8">
+              <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest mb-3">Monthly Campaigns</p>
+              <p className="text-white text-5xl md:text-6xl font-bold tracking-tighter leading-none">50+</p>
+            </div>
           </div>
 
           {/* Torrell portrait */}
@@ -634,19 +673,6 @@ export default function App() {
               <p className="text-white font-bold tracking-tight text-sm">Jazz Thornton</p>
               <p className="text-white/60 text-xs">Mental Health Activist</p>
               <p className="text-white/80 text-xs font-semibold mt-0.5">4.1M+ Followers</p>
-            </div>
-          </div>
-
-          {/* Quote tile — teamphoto background */}
-          <div className="col-span-1 md:col-span-2 relative rounded-[1.5rem] overflow-hidden border border-gray-900/6 min-h-[200px]">
-            <img src={IMGS.teamphoto} className="absolute inset-0 w-full h-full object-cover" alt="WeAreTenzing team" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/30"></div>
-            <div className="relative z-10 p-7 md:p-10 h-full flex flex-col justify-between">
-              <iconify-icon icon="solar:quote-up-linear" width="28" className="text-white/60 mb-4"></iconify-icon>
-              <p className="text-2xl md:text-3xl font-cormorant italic text-white leading-tight">
-                "The most authentic creator agency we've worked with. The ROI has never been higher."
-              </p>
-              <p className="text-sm text-white/60 font-medium mt-6">— Elena Chen, Bloom Skincare</p>
             </div>
           </div>
 
@@ -676,6 +702,43 @@ export default function App() {
             <p className="text-gray-600 text-[10px] font-bold uppercase tracking-widest mb-3">Talent Managed</p>
             <p className="text-5xl md:text-6xl font-bold tracking-tighter leading-none">120+</p>
             <p className="text-gray-600 text-xs mt-2">Across NZ & Australia</p>
+          </div>
+        </div>
+
+        {/* Talent scroll — fused directly below bento grid */}
+        <div className="mt-14 sm:mt-20">
+          <div className="talent-scroll-track scroll-reveal sr-delay-1" style={{ WebkitOverflowScrolling: 'touch' }}>
+            {[
+              { img: IMGS.howtodad,   name: 'HowToDad',      niche: 'Family & Comedy',        f: '6M+' },
+              { img: IMGS.jazz,       name: 'Jazz Thornton', niche: 'Mental Health & Author', f: '4.1M+' },
+              { img: IMGS.torrell,    name: 'Torrell Tafa',  niche: 'Lifestyle',              f: '2.3M' },
+              { img: IMGS.rubytui,    name: 'Ruby Tui',      niche: 'Sport & Wellbeing',      f: '318K' },
+              { img: IMGS.louis,      name: 'Louis Davis',   niche: 'Entertainment',          f: '2.7M' },
+              { img: IMGS.groupEvent, name: 'WeAreTenzing',  niche: 'Agency Events',          f: '34M combined' },
+            ].map(({ img, name, niche, f }) => (
+              <div key={name} className="talent-portrait-card shrink-0 w-[180px] sm:w-[210px] md:w-[250px] rounded-[1.2rem]">
+                <img src={img} alt={name} loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
+                <div className="absolute bottom-5 left-5 z-10">
+                  <p className="text-white font-bold tracking-tight text-sm">{name}</p>
+                  <p className="text-white/50 text-[10px] uppercase tracking-widest mt-0.5">{niche}</p>
+                  <p className="text-white text-sm font-bold mt-1">{f}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Subscribe bar */}
+        <div className="mt-12">
+          <div className="bg-[#efeae5] rounded-[1.5rem] px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4 scroll-reveal border border-gray-900/5">
+            <div>
+              <p className="font-bold text-gray-900 tracking-tight">Stay across NZ's creator economy</p>
+              <p className="text-xs text-gray-500 mt-1">Campaigns, talent news, and insights — straight to your inbox.</p>
+            </div>
+            <button className="btn-magnetic bg-black text-white text-xs font-bold px-6 py-3 rounded-full hover:bg-gray-800 transition-colors whitespace-nowrap shrink-0">
+              Subscribe →
+            </button>
           </div>
         </div>
       </section>
@@ -709,36 +772,45 @@ export default function App() {
 
           {/* Journey timeline — horizontal, colourful */}
           <div className="relative mb-16 md:mb-24">
-            {/* Gradient connecting line (desktop) */}
+            {/* Gradient connecting line (desktop only) */}
             <div className="hidden md:block absolute top-[38px] left-[40px] right-[40px] h-px z-0" style={{ background: 'linear-gradient(to right, #6366f1, #8b5cf6, #06b6d4, #10b981, #84cc16)' }}></div>
 
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-4">
+            <div className="journey-track grid md:grid-cols-5 gap-6 md:gap-4">
               {[
-                { n: '01', icon: 'solar:phone-calling-linear',            title: 'Discovery',  desc: 'We learn your goals and audience.',             color: 'from-indigo-500 to-violet-600',   ring: 'ring-indigo-500/30',   text: 'text-indigo-300'   },
-                { n: '02', icon: 'solar:users-group-two-rounded-linear',  title: 'Match',      desc: 'We pair you with the right creators.',           color: 'from-violet-500 to-purple-600',   ring: 'ring-violet-500/30',   text: 'text-violet-300'   },
-                { n: '03', icon: 'solar:document-add-linear',             title: 'Create',     desc: 'Concepts developed & approved by you.',          color: 'from-cyan-500 to-blue-600',       ring: 'ring-cyan-500/30',     text: 'text-cyan-300'     },
-                { n: '04', icon: 'solar:play-circle-linear',              title: 'Launch',     desc: 'Content goes live across platforms.',             color: 'from-emerald-500 to-teal-600',    ring: 'ring-emerald-500/30',  text: 'text-emerald-300'  },
-                { n: '05', icon: 'solar:chart-square-linear',             title: 'Measure',    desc: 'Full performance reporting delivered.',          color: 'from-lime-500 to-green-600',      ring: 'ring-lime-500/30',     text: 'text-lime-300'     },
-              ].map(({ n, icon, title, desc, color, ring, text }, idx) => (
-                <div
-                  key={n}
-                  className="journey-step flex flex-col items-center text-center relative z-10"
-                  style={{ '--step-delay': `${idx * 130}ms` }}
-                >
-                  <div className={`w-[76px] h-[76px] bg-gradient-to-br ${color} rounded-2xl flex items-center justify-center mb-5 ring-4 ${ring} shadow-lg hover:scale-105 transition-transform duration-300`}>
-                    <iconify-icon icon={icon} width="32" className="text-white"></iconify-icon>
+                { n: '01', icon: 'solar:phone-calling-linear',            title: 'Discovery',  desc: 'We learn your goals and audience.',             color: 'from-indigo-500 to-violet-600',   ring: 'ring-indigo-500/30',   text: 'text-indigo-300',   bar: '#6366f1' },
+                { n: '02', icon: 'solar:users-group-two-rounded-linear',  title: 'Match',      desc: 'We pair you with the right creators.',           color: 'from-violet-500 to-purple-600',   ring: 'ring-violet-500/30',   text: 'text-violet-300',   bar: '#8b5cf6' },
+                { n: '03', icon: 'solar:document-add-linear',             title: 'Create',     desc: 'Concepts developed & approved by you.',          color: 'from-cyan-500 to-blue-600',       ring: 'ring-cyan-500/30',     text: 'text-cyan-300',     bar: '#06b6d4' },
+                { n: '04', icon: 'solar:play-circle-linear',              title: 'Launch',     desc: 'Content goes live across platforms.',             color: 'from-emerald-500 to-teal-600',    ring: 'ring-emerald-500/30',  text: 'text-emerald-300',  bar: '#10b981' },
+                { n: '05', icon: 'solar:chart-square-linear',             title: 'Measure',    desc: 'Full performance reporting delivered.',          color: 'from-lime-500 to-green-600',      ring: 'ring-lime-500/30',     text: 'text-lime-300',     bar: '#84cc16' },
+              ].map(({ n, icon, title, desc, color, ring, text, bar }, idx, arr) => (
+                <React.Fragment key={n}>
+                  <div
+                    className="journey-step flex flex-col items-center text-center relative z-10"
+                    style={{ '--step-delay': `${idx * 130}ms` }}
+                  >
+                    <div className={`w-[76px] h-[76px] bg-gradient-to-br ${color} rounded-2xl flex items-center justify-center mb-4 ring-4 ${ring} shadow-lg hover:scale-105 transition-transform duration-300`}>
+                      <iconify-icon icon={icon} width="32" className="text-white"></iconify-icon>
+                    </div>
+                    {/* Mobile progress bar */}
+                    <div className="md:hidden w-10 h-0.5 rounded-full mb-3 opacity-60" style={{ background: bar }}></div>
+                    <span className={`text-[10px] font-bold tracking-widest ${text} mb-1`}>{n}</span>
+                    <p className="font-bold text-white tracking-tight mb-1.5">{title}</p>
+                    <p className="journey-step-desc text-gray-500 text-xs leading-relaxed max-w-[140px]">{desc}</p>
                   </div>
-                  <span className={`text-[10px] font-bold tracking-widest ${text} mb-1`}>{n}</span>
-                  <p className="font-bold text-white tracking-tight mb-1.5">{title}</p>
-                  <p className="text-gray-500 text-xs leading-relaxed max-w-[140px]">{desc}</p>
-                </div>
+                  {idx < arr.length - 1 && (
+                    <div className="journey-arrow">›</div>
+                  )}
+                </React.Fragment>
               ))}
             </div>
           </div>
 
           {/* Performance comparison — colourful radial chart feel */}
           <div className="bar-chart-section">
-            <p className="text-[10px] font-bold tracking-[0.28em] uppercase text-gray-600 mb-10">WeAreTenzing vs. Traditional Agencies</p>
+            <p className="text-[10px] font-bold tracking-[0.28em] uppercase text-gray-600 mb-10">
+              <span style={{ background: 'linear-gradient(to right, #6366f1, #8b5cf6, #06b6d4, #10b981, #84cc16)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>WeAreTenzing</span>
+              {' '}vs. Traditional Agencies
+            </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
               {[
                 { metric: 'Engagement Rate',     wt: 92, ta: 38, grad: 'linear-gradient(to top, #6366f1, #a78bfa)' },
@@ -773,88 +845,20 @@ export default function App() {
                 </div>
               ))}
             </div>
-            <div className="flex items-center gap-6 mt-8 pt-6 border-t border-white/[0.06]">
+            <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/[0.06]">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-sm" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}></div>
-                <span className="text-[10px] text-gray-600 font-semibold">Traditional Agency</span>
+                <span className="text-[10px] text-gray-500 font-semibold uppercase tracking-widest">Traditional Agencies</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-sm" style={{ background: 'linear-gradient(135deg, #6366f1, #06b6d4)' }}></div>
-                <span className="text-[10px] text-gray-300 font-semibold">WeAreTenzing</span>
+                <div className="w-3 h-3 rounded-sm" style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4, #10b981)' }}></div>
+                <span className="text-[10px] font-bold uppercase tracking-widest" style={{ background: 'linear-gradient(to right, #6366f1, #8b5cf6, #06b6d4, #10b981)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>WeAreTenzing</span>
               </div>
             </div>
           </div>
         </div>{/* end relative z-10 */}
       </section>
 
-      {/* ═══════════════════════════════════════════════════
-          FULL-BLEED IMAGE + QUOTE
-          ═══════════════════════════════════════════════════ */}
-      <section className="w-full max-w-7xl mx-auto px-6 md:px-12 py-16">
-        <div className="relative rounded-[1.5rem] overflow-hidden min-h-[440px] md:min-h-[520px] group scroll-reveal cursor-pointer">
-          <img src={IMGS.groupHero} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" alt="WeAreTenzing event" loading="lazy" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/10"></div>
-          <div className="absolute bottom-10 left-10 right-10 max-w-2xl">
-            <p className="text-white text-3xl md:text-5xl font-cormorant italic leading-tight drop-shadow-xl">
-              "They matched us with creators our audience genuinely trusts."
-            </p>
-            <p className="text-white/60 text-sm font-medium mt-4">Elena Chen — Bloom Skincare</p>
-          </div>
-          <div className="absolute top-6 right-6 flex gap-2">
-            <span className="bg-white/10 backdrop-blur border border-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-full">100% NZ-Owned</span>
-            <span className="bg-white/10 backdrop-blur border border-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-full">Creator-First</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════
-          FEATURED TALENT — horizontal scroll
-          ═══════════════════════════════════════════════════ */}
-      <section className="w-full py-14 sm:py-20 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12 mb-8 sm:mb-10 flex flex-col md:flex-row items-end justify-between gap-4 scroll-reveal">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-gray-900 leading-[0.95]">
-            The people behind the{' '}
-            <span className="font-cormorant italic font-normal">numbers.</span>
-          </h2>
-          <a href="/talent" className="group flex items-center gap-2 text-sm font-semibold text-gray-900 border-b border-gray-900/20 pb-1 hover:border-gray-900 transition-colors whitespace-nowrap self-start md:self-auto">
-            View all talent
-            <iconify-icon icon="solar:arrow-right-up-linear" className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></iconify-icon>
-          </a>
-        </div>
-        <div className="px-5 sm:px-6 md:px-12">
-          <div className="talent-scroll-track scroll-reveal sr-delay-1" style={{ WebkitOverflowScrolling: 'touch' }}>
-            {[
-              { img: IMGS.howtodad,   name: 'HowToDad',      niche: 'Family & Comedy',        f: '6M+' },
-              { img: IMGS.jazz,       name: 'Jazz Thornton', niche: 'Mental Health & Author', f: '4.1M+' },
-              { img: IMGS.torrell,    name: 'Torrell Tafa',  niche: 'Lifestyle',              f: '2.3M' },
-              { img: IMGS.rubytui,    name: 'Ruby Tui',      niche: 'Sport & Wellbeing',      f: '318K' },
-              { img: IMGS.louis,      name: 'Louis Davis',   niche: 'Entertainment',          f: '2.7M' },
-              { img: IMGS.groupEvent, name: 'WeAreTenzing',  niche: 'Agency Events',          f: '34M combined' },
-            ].map(({ img, name, niche, f }) => (
-              <div key={name} className="talent-portrait-card shrink-0 w-[180px] sm:w-[210px] md:w-[250px] rounded-[1.2rem]">
-                <img src={img} alt={name} loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
-                <div className="absolute bottom-5 left-5 z-10">
-                  <p className="text-white font-bold tracking-tight text-sm">{name}</p>
-                  <p className="text-white/50 text-[10px] uppercase tracking-widest mt-0.5">{niche}</p>
-                  <p className="text-white text-sm font-bold mt-1">{f}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-6 md:px-12 mt-12">
-          <div className="bg-[#efeae5] rounded-[1.5rem] px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4 scroll-reveal border border-gray-900/5">
-            <div>
-              <p className="font-bold text-gray-900 tracking-tight">Stay across NZ's creator economy</p>
-              <p className="text-xs text-gray-500 mt-1">Campaigns, talent news, and insights — straight to your inbox.</p>
-            </div>
-            <button className="btn-magnetic bg-black text-white text-xs font-bold px-6 py-3 rounded-full hover:bg-gray-800 transition-colors whitespace-nowrap shrink-0">
-              Subscribe →
-            </button>
-          </div>
-        </div>
-      </section>
 
       {/* ═══════════════════════════════════════════════════
           FAQ SECTION
@@ -911,7 +915,7 @@ export default function App() {
             </a>
           </div>
 
-          {/* Instagram-style phone */}
+          {/* Instagram-style phone — cycles through talent */}
           <div className="bg-[#0c0c0c] rounded-[1.5rem] relative overflow-hidden flex items-center justify-center min-h-[400px] sm:min-h-[480px] py-10 border border-white/5">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.03)_0%,_transparent_70%)] pointer-events-none"></div>
             {/* Phone frame — fixed height */}
@@ -920,17 +924,24 @@ export default function App() {
                 <div className="bg-white rounded-[1.8rem] overflow-hidden" style={{ height: '420px' }}>
                   {/* Dynamic Island */}
                   <div className="w-16 h-4 bg-black rounded-b-2xl mx-auto mt-1 mb-2"></div>
-                  {/* Profile header */}
+                  {/* Profile header — cycles with currentCardIndex */}
                   <div className="px-3 pb-2">
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-orange-400 shrink-0">
-                        <img src={IMGS.groupEvent} className="w-full h-full object-cover" alt="" />
+                      <div className="w-10 h-10 rounded-full overflow-hidden ring-2 shrink-0" style={{ ringColor: TALENT_CARDS[currentCardIndex].ringClass }}>
+                        <img
+                          src={TALENT_CARDS[currentCardIndex].image}
+                          className="w-full h-full object-cover object-center"
+                          style={{ objectPosition: 'center top' }}
+                          alt=""
+                        />
                       </div>
-                      <div className="flex-1">
-                        <p className="text-[11px] font-bold text-gray-900 leading-tight">wearetenzing</p>
-                        <p className="text-[9px] text-gray-500 leading-tight">Creator Agency · NZ 🇳🇿</p>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[11px] font-bold text-gray-900 leading-tight truncate">{TALENT_CARDS[currentCardIndex].username}</p>
+                        <p className="text-[9px] text-gray-500 leading-tight">{TALENT_CARDS[currentCardIndex].followers} Followers · NZ 🇳🇿</p>
                       </div>
-                      <div className="bg-black text-white text-[8px] font-bold px-2 py-1 rounded">Follow</div>
+                      <div className={`${TALENT_CARDS[currentCardIndex].ctaClass} text-[8px] font-bold px-2 py-1 rounded`}>
+                        {TALENT_CARDS[currentCardIndex].ctaText}
+                      </div>
                     </div>
                     {/* Stats */}
                     <div className="flex justify-around py-1.5 border-y border-gray-100 mb-2">
@@ -941,24 +952,39 @@ export default function App() {
                         </div>
                       ))}
                     </div>
-                    {/* Stories row */}
+                    {/* Stories row — rotates starting from currentCardIndex */}
                     <div className="flex gap-2 mb-2">
-                      {[IMGS.jazz, IMGS.howtodad, IMGS.rubytui, IMGS.torrell].map((img, i) => (
+                      {[...TALENT_CARDS.slice(currentCardIndex), ...TALENT_CARDS.slice(0, currentCardIndex)].slice(0, 4).map((card, i) => (
                         <div key={i} className="w-10 h-10 rounded-full overflow-hidden ring-[1.5px] ring-orange-400 ring-offset-1 shrink-0">
-                          <img src={img} className="w-full h-full object-cover" alt="" loading="lazy" />
+                          <img src={card.image} className="w-full h-full object-cover" style={{ objectPosition: 'center top' }} alt="" loading="lazy" />
                         </div>
                       ))}
                     </div>
                   </div>
-                  {/* 3×3 Instagram grid */}
+                  {/* 3×3 Instagram grid — rotates images */}
                   <div className="grid grid-cols-3 gap-[1px] bg-gray-200">
-                    {[IMGS.jazz, IMGS.louis, IMGS.howtodad, IMGS.torrell, IMGS.rubytui, IMGS.groupEvent, IMGS.groupHero, IMGS.talent1, IMGS.jazz].map((img, i) => (
-                      <div key={i} className="insta-grid-item">
-                        <img src={img} alt="" loading="lazy" />
-                      </div>
+                    {[...TALENT_CARDS.map(c => c.image), IMGS.groupHero, IMGS.talent1, IMGS.groupEvent]
+                      .slice(currentCardIndex, currentCardIndex + 9)
+                      .concat([...TALENT_CARDS.map(c => c.image), IMGS.groupHero, IMGS.talent1, IMGS.groupEvent])
+                      .slice(0, 9)
+                      .map((img, i) => (
+                        <div key={i} className="insta-grid-item transition-opacity duration-700">
+                          <img src={img} alt="" loading="lazy" />
+                        </div>
                     ))}
                   </div>
                 </div>
+              </div>
+              {/* Slide dots */}
+              <div className="flex justify-center gap-1.5 mt-3">
+                {TALENT_CARDS.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentCardIndex(i)}
+                    className={`rounded-full transition-all duration-300 ${i === currentCardIndex ? 'w-4 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/30'}`}
+                    aria-label={`Slide ${i + 1}`}
+                  />
+                ))}
               </div>
               {/* Floating badge */}
               <div className="absolute -top-3 -right-8 bg-white rounded-xl shadow-xl px-2.5 py-1.5 flex items-center gap-1.5 border border-gray-100 z-10">
