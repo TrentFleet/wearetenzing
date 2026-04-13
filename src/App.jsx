@@ -171,13 +171,13 @@ export default function App() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Scroll-driven reveals (IntersectionObserver)
+  // Scroll-driven reveals (IntersectionObserver) — fire earlier for mobile feel
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); }
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
     document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
     return () => observer.disconnect();
   }, []);
@@ -245,19 +245,21 @@ export default function App() {
     return () => cleanups.forEach(fn => fn());
   }, []);
 
-  // Page loader sequence: Talent → Managed → Amplified → Logo
+  // Page loader sequence: Talent → Managed → Amplified → Logo (slow, cinematic)
   useEffect(() => {
     const t1 = setTimeout(() => setLoaderPhase(1), 200);
-    const t2 = setTimeout(() => setLoaderPhase(2), 750);
-    const t3 = setTimeout(() => setLoaderPhase(3), 1300);
-    const t4 = setTimeout(() => setLoaderPhase(4), 1900);
-    const t5 = setTimeout(() => setLoaderExiting(true), 2700);
-    const t6 = setTimeout(() => setLoaderVisible(false), 3700);
+    const t2 = setTimeout(() => setLoaderPhase(2), 950);
+    const t3 = setTimeout(() => setLoaderPhase(3), 1700);
+    const t4 = setTimeout(() => setLoaderPhase(4), 2450);
+    const t5 = setTimeout(() => setLoaderExiting(true), 3400);
+    const t6 = setTimeout(() => setLoaderVisible(false), 4500);
     return () => [t1, t2, t3, t4, t5, t6].forEach(clearTimeout);
   }, []);
 
-  // Parallax scroll effect
+  // Parallax scroll effect — disabled on touch/mobile devices
   useEffect(() => {
+    const isTouchDevice = () => window.matchMedia('(hover: none)').matches || window.innerWidth < 768;
+    if (isTouchDevice()) return;
     const onScroll = () => {
       const sy = window.scrollY;
       document.querySelectorAll('[data-parallax-speed]').forEach(el => {
@@ -288,7 +290,11 @@ export default function App() {
       {/* ─── Page Loader ─── */}
       {loaderVisible && (
         <div className={`page-loader ${loaderExiting ? 'loader-exit' : ''}`} aria-hidden="true">
-          <div className="relative flex items-center justify-center" style={{ minHeight: '1em' }}>
+          {/* Subtle corner label */}
+          <div className="loader-counter">NZ · Creator Agency</div>
+
+          {/* Centre word / logo sequence */}
+          <div className="relative flex items-center justify-center w-full" style={{ minHeight: '1.1em' }}>
             {loaderPhase >= 1 && loaderPhase < 4 && (
               <span key={loaderPhase} className="loader-word">
                 {[null, 'Talent.', 'Managed.', 'Amplified.'][loaderPhase]}
@@ -296,13 +302,19 @@ export default function App() {
             )}
             {loaderPhase >= 4 && (
               <div key="logo" className="loader-logo-lockup">
-                <img src="https://wearetenzing.com/wp-content/uploads/2025/08/icon-dark.png" alt="" className="w-14 h-14 object-contain brightness-0 invert" />
+                <img
+                  src="https://wearetenzing.com/wp-content/uploads/2025/08/icon-dark.png"
+                  alt=""
+                  className="w-16 h-16 object-contain brightness-0 invert"
+                  style={{ filter: 'brightness(0) invert(1)' }}
+                />
                 <span>WeAreTenzing</span>
               </div>
             )}
           </div>
+
+          {/* Progress bar */}
           <div className="loader-bar"><div className="loader-bar-fill"></div></div>
-          <div className="loader-counter">NZ / Creator Agency</div>
         </div>
       )}
 
@@ -346,11 +358,11 @@ export default function App() {
           ═══════════════════════════════════════════════════ */}
       <main>
         <section className="hero-gradient relative overflow-hidden page-top-pad">
-          <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 lg:py-24">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12 py-10 sm:py-14 lg:py-24">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
 
               {/* ── Left: Text ── */}
-              <div className="flex flex-col gap-7 max-w-xl z-10">
+              <div className="flex flex-col gap-5 sm:gap-7 max-w-xl z-10">
 
                 {/* Badge */}
                 <div className="animate-enter flex items-center gap-3">
@@ -368,7 +380,7 @@ export default function App() {
                 </div>
 
                 {/* Headline */}
-                <h1 className="animate-enter delay-100 text-[clamp(2.8rem,6vw,5.5rem)] font-semibold leading-[0.91] tracking-tight text-gray-900">
+                <h1 className="animate-enter delay-100 text-[clamp(2.4rem,7vw,5.5rem)] font-semibold leading-[0.91] tracking-tight text-gray-900">
                   We connect brands<br />with the voices<br />people{' '}
                   <span className="font-cormorant italic font-normal">trust.</span>
                 </h1>
@@ -391,7 +403,7 @@ export default function App() {
                 </div>
 
                 {/* Stats */}
-                <div className="animate-enter delay-400 mt-2 pt-7 border-t border-gray-900/10 grid grid-cols-2 sm:grid-cols-4 gap-5">
+                <div className="animate-enter delay-400 mt-1 pt-5 border-t border-gray-900/10 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-5">
                   {[
                     { target: 120, suffix: '+',  label: 'Creators' },
                     { target: 34,  suffix: 'M+', label: 'Reach', float: true },
@@ -409,7 +421,7 @@ export default function App() {
               </div>
 
               {/* ── Right: Phone ── */}
-              <div ref={phoneContainerRef} className="phone-tilt-container phone-slide-in relative flex justify-center lg:justify-end">
+              <div ref={phoneContainerRef} className="phone-tilt-container phone-slide-in relative flex justify-center lg:justify-end mt-2 lg:mt-0">
 
                 {/* Ambient glow */}
                 <div className="phone-ambient-glow absolute inset-0 z-0 scale-125 rounded-full overflow-hidden pointer-events-none">
@@ -420,20 +432,20 @@ export default function App() {
                   ))}
                 </div>
 
-                {/* Floating pills */}
-                <div className="floating-pill pill-1 absolute top-[12%] -left-2 md:-left-10 z-30">
+                {/* Floating pills — hidden on xs, shown sm+ */}
+                <div className="floating-pill pill-1 hidden sm:flex absolute top-[12%] -left-2 md:-left-10 z-30">
                   <div className="w-5 h-5 rounded-full bg-black flex items-center justify-center">
                     <iconify-icon icon="logos:tiktok-icon" width="10"></iconify-icon>
                   </div>
                   <span className="text-gray-900">6M+ <span className="font-normal text-gray-500">Followers</span></span>
                 </div>
-                <div className="floating-pill pill-2 absolute top-[38%] -right-2 md:-right-8 z-30">
+                <div className="floating-pill pill-2 hidden sm:flex absolute top-[38%] -right-2 md:-right-8 z-30">
                   <div className="w-5 h-5 rounded-full bg-pink-100 flex items-center justify-center">
                     <iconify-icon icon="solar:heart-bold" width="10" className="text-pink-500"></iconify-icon>
                   </div>
                   <span className="text-gray-900">+245% <span className="font-normal text-gray-500">Engagement</span></span>
                 </div>
-                <div className="floating-pill pill-3 absolute bottom-[24%] -left-2 md:-left-12 z-30">
+                <div className="floating-pill pill-3 hidden sm:flex absolute bottom-[24%] -left-2 md:-left-12 z-30">
                   <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
                     <iconify-icon icon="solar:verified-check-linear" width="10" className="text-green-600"></iconify-icon>
                   </div>
@@ -441,7 +453,7 @@ export default function App() {
                 </div>
 
                 {/* Phone Frame */}
-                <div className="phone-inner relative w-[270px] h-[550px] md:w-[290px] md:h-[590px] bg-white rounded-[2.2rem] shadow-2xl border-[7px] border-white ring-1 ring-gray-900/8 overflow-hidden z-10">
+                <div className="phone-inner relative w-[230px] h-[470px] sm:w-[260px] sm:h-[530px] md:w-[290px] md:h-[590px] bg-white rounded-[2.2rem] shadow-2xl border-[7px] border-white ring-1 ring-gray-900/8 overflow-hidden z-10">
                   {/* Dynamic Island */}
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 h-6 w-24 bg-black rounded-b-xl z-30"></div>
                   {/* Status bar */}
@@ -525,8 +537,8 @@ export default function App() {
       {/* ═══════════════════════════════════════════════════
           CREATOR STRIP — static, no animation
           ═══════════════════════════════════════════════════ */}
-      <div className="py-5 my-2 border-b border-gray-900/6 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-wrap items-center gap-0">
+      <div className="py-4 my-2 border-b border-gray-900/6 overflow-x-auto no-scrollbar">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12 flex items-center gap-0 min-w-max sm:min-w-0 sm:flex-wrap">
           {marqueeItems.map((item, i) => (
             <div key={i} className="flex items-center">
               <span className="text-sm font-bold tracking-tight text-gray-900 px-3 whitespace-nowrap">{item.name}</span>
@@ -540,8 +552,8 @@ export default function App() {
       {/* ═══════════════════════════════════════════════════
           DARK PARALLAX STATS SECTION — structured
           ═══════════════════════════════════════════════════ */}
-      <section className="bg-[#0c0c0c] relative overflow-hidden py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+      <section className="bg-[#0c0c0c] relative overflow-hidden py-12 md:py-24">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
           {[
             { idx: '01', num: '34M+',  label: 'Combined Creator Reach',  sub: 'Across TikTok, Instagram & YouTube',      speed: '-0.02', right: false },
             { idx: '02', num: '120+',  label: 'Talent Managed',          sub: 'Active creators in our NZ & AU roster',   speed:  '0.02', right: true  },
@@ -549,13 +561,13 @@ export default function App() {
           ].map(({ idx, num, label, sub, speed, right }) => (
             <div
               key={num}
-              className={`flex ${right ? 'justify-end' : 'justify-start'} items-center gap-5 md:gap-10 py-4 md:py-6 border-b border-white/[0.06] scroll-reveal group`}
+              className={`flex ${right ? 'sm:justify-end justify-start' : 'justify-start'} items-center gap-4 sm:gap-6 md:gap-10 py-5 md:py-6 border-b border-white/[0.06] scroll-reveal group`}
             >
               {!right && <span className="text-white/20 text-[10px] font-bold tracking-[0.25em] tabular-nums shrink-0 hidden md:block">{idx}</span>}
               <span className="giant-text text-white leading-none tabular-nums" data-parallax-speed={speed}>{num}</span>
-              <div className="hidden sm:flex flex-col gap-1">
-                <span className="text-gray-300 text-base md:text-xl font-light group-hover:text-white transition-colors">{label}</span>
-                <span className="text-gray-600 text-xs md:text-sm font-normal">{sub}</span>
+              <div className="flex flex-col gap-1 min-w-0">
+                <span className="text-gray-300 text-sm sm:text-base md:text-xl font-light group-hover:text-white transition-colors leading-snug">{label}</span>
+                <span className="text-gray-600 text-xs md:text-sm font-normal leading-snug">{sub}</span>
               </div>
               {right && <span className="text-white/20 text-[10px] font-bold tracking-[0.25em] tabular-nums shrink-0 hidden md:block">{idx}</span>}
             </div>
@@ -570,7 +582,7 @@ export default function App() {
       {/* ═══════════════════════════════════════════════════
           BENTO GRID — Results
           ═══════════════════════════════════════════════════ */}
-      <section className="w-full max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-28">
+      <section className="w-full max-w-7xl mx-auto px-5 sm:px-6 md:px-12 py-14 sm:py-20 md:py-28">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 scroll-reveal">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-gray-900 leading-[0.95]">
             Real creators.<br />
@@ -678,7 +690,7 @@ export default function App() {
         <div className="absolute bottom-0 left-1/3 w-[450px] h-[450px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.14) 0%, transparent 70%)', transform: 'translateY(40%)' }}></div>
         <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%)' }}></div>
 
-        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12 relative z-10">
 
           {/* Heading */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 scroll-reveal">
@@ -798,9 +810,9 @@ export default function App() {
       {/* ═══════════════════════════════════════════════════
           FEATURED TALENT — horizontal scroll
           ═══════════════════════════════════════════════════ */}
-      <section className="w-full py-20 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 mb-10 flex flex-col md:flex-row items-end justify-between gap-4 scroll-reveal">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-gray-900 leading-[0.95]">
+      <section className="w-full py-14 sm:py-20 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12 mb-8 sm:mb-10 flex flex-col md:flex-row items-end justify-between gap-4 scroll-reveal">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-gray-900 leading-[0.95]">
             The people behind the{' '}
             <span className="font-cormorant italic font-normal">numbers.</span>
           </h2>
@@ -809,8 +821,8 @@ export default function App() {
             <iconify-icon icon="solar:arrow-right-up-linear" className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></iconify-icon>
           </a>
         </div>
-        <div className="px-6 md:px-12">
-          <div className="talent-scroll-track scroll-reveal sr-delay-1">
+        <div className="px-5 sm:px-6 md:px-12">
+          <div className="talent-scroll-track scroll-reveal sr-delay-1" style={{ WebkitOverflowScrolling: 'touch' }}>
             {[
               { img: IMGS.howtodad,   name: 'HowToDad',      niche: 'Family & Comedy',        f: '6M+' },
               { img: IMGS.jazz,       name: 'Jazz Thornton', niche: 'Mental Health & Author', f: '4.1M+' },
@@ -819,7 +831,7 @@ export default function App() {
               { img: IMGS.louis,      name: 'Louis Davis',   niche: 'Entertainment',          f: '2.7M' },
               { img: IMGS.groupEvent, name: 'WeAreTenzing',  niche: 'Agency Events',          f: '34M combined' },
             ].map(({ img, name, niche, f }) => (
-              <div key={name} className="talent-portrait-card shrink-0 w-[220px] md:w-[250px] rounded-[1.2rem]">
+              <div key={name} className="talent-portrait-card shrink-0 w-[180px] sm:w-[210px] md:w-[250px] rounded-[1.2rem]">
                 <img src={img} alt={name} loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
                 <div className="absolute bottom-5 left-5 z-10">
@@ -847,7 +859,7 @@ export default function App() {
       {/* ═══════════════════════════════════════════════════
           FAQ SECTION
           ═══════════════════════════════════════════════════ */}
-      <section className="w-full max-w-3xl mx-auto px-6 md:px-12 py-20 relative">
+      <section className="w-full max-w-3xl mx-auto px-5 sm:px-6 md:px-12 py-14 sm:py-20 relative">
         <div className="mb-14 scroll-reveal">
           <span className="bg-[#d1c8c0] text-gray-900 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider mb-6 inline-block">Questions</span>
           <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-gray-900 leading-[0.95] mt-6">
@@ -879,11 +891,11 @@ export default function App() {
       {/* ═══════════════════════════════════════════════════
           FOOTER CTA + LINKS
           ═══════════════════════════════════════════════════ */}
-      <footer className="w-full max-w-7xl mx-auto px-6 md:px-12 pb-12 pt-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-20 scroll-reveal">
+      <footer className="w-full max-w-7xl mx-auto px-5 sm:px-6 md:px-12 pb-12 pt-12 sm:pt-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 mb-16 sm:mb-20 scroll-reveal">
 
           {/* CTA Card */}
-          <div className="bg-[#efeae5] rounded-[1.5rem] p-10 md:p-16 flex flex-col justify-center items-start text-left relative overflow-hidden border border-gray-900/5">
+          <div className="bg-[#efeae5] rounded-[1.5rem] p-8 sm:p-10 md:p-16 flex flex-col justify-center items-start text-left relative overflow-hidden border border-gray-900/5">
             <div className="w-14 h-14 bg-black text-white rounded-xl flex items-center justify-center mb-8 rotate-3">
               <iconify-icon icon="solar:stars-minimalistic-linear" width="28"></iconify-icon>
             </div>
@@ -900,7 +912,7 @@ export default function App() {
           </div>
 
           {/* Instagram-style phone */}
-          <div className="bg-[#0c0c0c] rounded-[1.5rem] relative overflow-hidden flex items-center justify-center min-h-[480px] py-10 border border-white/5">
+          <div className="bg-[#0c0c0c] rounded-[1.5rem] relative overflow-hidden flex items-center justify-center min-h-[400px] sm:min-h-[480px] py-10 border border-white/5">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.03)_0%,_transparent_70%)] pointer-events-none"></div>
             {/* Phone frame — fixed height */}
             <div className="relative">
@@ -963,7 +975,7 @@ export default function App() {
         </div>
 
         {/* Footer Links */}
-        <div className="border-t border-gray-900/10 pt-14 flex flex-col md:flex-row justify-between gap-12 md:gap-24 scroll-reveal">
+        <div className="border-t border-gray-900/10 pt-10 sm:pt-14 flex flex-col md:flex-row justify-between gap-10 md:gap-24 scroll-reveal">
           <div className="max-w-xs">
             <div className="flex items-center gap-2 mb-5">
               <img src="https://wearetenzing.com/wp-content/uploads/2025/08/icon-dark.png" alt="WeAreTenzing" className="w-6 h-6 object-contain" />
